@@ -82,3 +82,6 @@ class EditGiftForm(ModelForm):
         exclude = ['person']
         widgets = {'wish_list': forms.HiddenInput, 'pk': forms.HiddenInput}
 
+
+class SearchForm(forms.Form):
+    last_name = forms.CharField(max_length=64, label='Wyszukaj osobę po nazwisku')

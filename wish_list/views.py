@@ -25,7 +25,7 @@ class LoginUserView(View):
                 next = request.GET.get('next')
                 if next is not None:
                     return redirect(next)
-                return redirect("/showUser/%s" % user.id)
+                return redirect('main')
         else:
             return render(request, 'wish_list/loginUser.html', {'form': form})       # info dlaczego i przekierowanie
 
@@ -35,7 +35,7 @@ class LogoutView(View):
     def get(self, request):
         if request.user.is_authenticated:
             logout(request)                  # wyloguj
-            return redirect("/login")
+            return redirect("main")
         return render (request, 'wish_list/loginUser.html')
 
 
@@ -138,7 +138,7 @@ class DeleteGiftView(View):
         return redirect("/%s/%s" % (user_id, list_id))
 
 
-
+# zapisywanie się na prezent
 class TakeGiftView(View):
     def get(self, request, user_id, list_id, gift_id):
         gift = Gifts.objects.get(pk=gift_id)
@@ -146,10 +146,40 @@ class TakeGiftView(View):
         gift.save()
         return redirect("/%s/%s" % (user_id, list_id))
 
-
+# wypisywanie się z prezentu
 class LeaveGiftView(View):
     def get(self, request, user_id, list_id, gift_id):
         gift = Gifts.objects.get(pk=gift_id)
         gift.person = None
         gift.save()
         return redirect("/%s/%s" % (user_id, list_id))
+
+
+# strona główna
+class MainView(View):
+    def get(self, request):
+   #     form = SearchForm()
+        return render(request, 'wish_list/main.html')
+'''
+    def post(self, request):
+        form = SearchForm(request.POST)
+        users = []
+        if form.is_valid():
+            last_name = form.cleaned_data.get("last_name")
+            users = User.objects.filter(last_name__icontains=last_name)
+        return render(request, 'wish_list/main.html', {'form': form, 'users': users})
+'''
+
+
+class SearchView(View):
+    def get(self, request):
+        form = SearchForm()
+        return render(request, 'wish_list/search.html', {'form': form})
+
+    def post(self, request):
+        form = SearchForm(request.POST)
+        users = []
+        if form.is_valid():
+            last_name = form.cleaned_data.get("last_name")
+            users = User.objects.filter(last_name__icontains=last_name)
+        return render(request, 'wish_list/search.html', {'form': form, 'users': users})

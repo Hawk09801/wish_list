@@ -12,8 +12,15 @@
     {% else %}
     <p>Witaj nieznajomy<button type="submit"><a href="/login">Zaloguj</a></button></p>
     {% endif %}
-     </div>
-        <h1>Super nazwa</h1>
+    </div>
+    <h1 style="text-align: center">Super nazwa</h1>
+    <div style="text-align: center">
+        <button type="submit"><a href="/">Strona główna</a></button>
+        <button type="submit"><a href="/{{ user.id }}/add_list">Utwórz swoją listę prezentów</a></button>
+        <button type="submit"><a href="/search">Wyszukaj osoby</a></button>
+        <button type="submit"><a href="/showUser/{{ user.id }}">Moje konto</a></button>
+        <p></p>
+    </div>
     {% endblock %}
     {% block content %}
 
