@@ -4,6 +4,7 @@
     <p>Osoba: {{ user.first_name }} {{ user.last_name }}</p>
     <p>Okazja: {{ wish_list.name }}</p>
     <button type="submit"><a href="/{{ user.id }}/{{ wish_list.id }}/addGift">Dodaj produkt do listy</a></button>
+    <button type="submit"><a href="/{{ user.id }}/{{ wish_list.id }}/delete">Usuń listę</a></button>
     <table>
         <tbody>
             {% for gift in gifts %}

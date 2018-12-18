@@ -36,6 +36,9 @@ urlpatterns = [
     url(r'^leave/(?P<user_id>(\d)+)/(?P<list_id>(\d)+)/(?P<gift_id>(\d)+)$', LeaveGiftView.as_view()),
     url(r'^$', MainView.as_view(), name='main'),
     url(r'^search$', SearchView.as_view()),
+    url(r'^edit/(?P<user_id>(\d)+)$', EditUserView.as_view()),
+    url(r'^edit/(?P<user_id>(\d)+)/editPassword$', EditPasswordView.as_view()),
+    url(r'^(?P<user_id>(\d)+)/(?P<list_id>(\d)+)/delete$', DeleteListView.as_view()),
 
 
 ]

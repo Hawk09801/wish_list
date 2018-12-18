@@ -85,3 +85,33 @@ class EditGiftForm(ModelForm):
 
 class SearchForm(forms.Form):
     last_name = forms.CharField(max_length=64, label='Wyszukaj osobę po nazwisku')
+
+
+class EditUserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+        widgets = {'email': forms.TextInput(attrs={'readonly':'readonly'})}
+        labels = {
+            'first_name': ('Imię:'),
+            'last_name': ('Nazwisko:'),
+            'email': ('Adres e-mail:'),
+        }
+        help_texts = {
+            'email': ('Nie można edytować adresu e-mail'),
+        }
+
+
+class EditPasswordForm(forms.Form):
+    new_password = forms.CharField(widget=forms.PasswordInput)
+    repeat_password = forms.CharField(widget=forms.PasswordInput)
+
+    def clean(self):
+        cleaned_date = super().clean()
+
+        field1 = cleaned_date.get('new_password')
+        field2 = cleaned_date.get('repeat_password')
+        if field1 != field2:
+            raise ValidationError("Wpisane hasła muszą być takie same")
+
+        return cleaned_date

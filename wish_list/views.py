@@ -183,3 +183,43 @@ class SearchView(View):
             last_name = form.cleaned_data.get("last_name")
             users = User.objects.filter(last_name__icontains=last_name)
         return render(request, 'wish_list/search.html', {'form': form, 'users': users})
+
+
+class EditUserView(View):
+    def get(self, request, user_id):
+        person = User.objects.get(pk=user_id)
+        form = EditUserForm(instance=person)
+        return render(request, 'wish_list/editUser.html', {'form': form})
+
+    def post(self, request, user_id):
+        form = EditUserForm(request.POST)
+        user = User.objects.get(pk=user_id)
+        if form.is_valid():
+            user.first_name = form.cleaned_data.get('first_name')
+            user.last_name = form.cleaned_data.get('last_name')
+            user.save()
+        return redirect('/showUser/%s' % user.id)
+
+class EditPasswordView(View):
+    def get(self, request, user_id):
+        form = EditPasswordForm()
+        return render(request, "wish_list/editPassword.html", {'form': form})
+
+    def post(self, request, user_id):
+    #    user = User.objects.get(pk=user_id)
+        form = EditPasswordForm(request.POST)
+        if form.is_valid():
+            new_password = form.cleaned_data.get("new_password")
+            u = User.objects.get(pk=user_id)
+            u.set_password(new_password)
+            u.save()
+            return redirect('/showUser/%s' % u.id)
+        return render(request, "wish_list/editPassword.html", {'form': form})
+
+
+class DeleteListView(View):
+    def get(self, request, user_id, list_id):
+        u = User.objects.get(pk=user_id)
+        list = List.objects.get(pk=list_id)
+        list.delete()
+        return redirect('/showUser/%s' % u.id)

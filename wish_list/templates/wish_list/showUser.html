@@ -2,12 +2,15 @@
 
 {% block content %}
 <h2>{{ user.first_name }} {{ user.last_name }}</h2>
-<button type="submit"><a href="/{{ user.id }}/add_list">Stwórz nową listę prezentów</a></button>
+<p><button type="submit"><a href="/edit/{{ user.id }}">Edytuj profil</a></button></p>
+<p><button type="submit"><a href="/{{ user.id }}/add_list">Stwórz nową listę prezentów</a></button></p>
 {% if lists %}
 <p>Twoje listy prezentów:</p>
 <ol>
     {% for list in lists %}
-    <li><a href="/{{ user.id }}/{{ list.id }}">{{ list.name }}</a></li>
+    <li>{{ list.name }} ---> <button type="submit"><a href="/{{ user.id }}/{{ list.id }}">Zobacz listę prezentów</a></button>
+        <button type="submit"><a href="/{{ user.id }}/{{ list.id }}/delete">Usuń listę</a></button>
+    </li>
     {% endfor %}
 </ol>
 {% else %}
