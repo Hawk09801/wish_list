@@ -7,13 +7,13 @@
     <body>
     {% block header %}
     <div style="text-align: right">
-    {% if user.is_authenticated %}
-    <p>Witaj, {{ user.first_name }}. Fajnie, że z nami jesteś.</p>
+    {% if request.user.is_authenticated %}
+        <p>Witaj, <a href="/showUser/{{ request.user.id }}">{{ request.user.first_name }}</a><button type="submit"><a href="/logout">Wyloguj</a></button></p>
     {% else %}
-    <p>Witaj nieznajomy<button type="submit"><a href="">Zaloguj</a></button></p>
+    <p>Witaj nieznajomy<button type="submit"><a href="/login">Zaloguj</a></button></p>
     {% endif %}
      </div>
-        <h1>IMAGEY</h1>
+        <h1>Super nazwa</h1>
     {% endblock %}
     {% block content %}
 

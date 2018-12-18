@@ -1,0 +1,13 @@
+{% extends 'wish_list/base.html' %}
+
+{% block content %}
+<h2>{{ user.first_name }} {{ user.last_name }}</h2>
+<button type="submit"><a href="/{{ user.id }}/add_list">Stwórz nową listę prezentów</a></button>
+<p>Twoje listy prezentów:</p>
+<ol>
+    {% for list in lists %}
+    <li><a href="/{{ user.id }}/{{ list.id }}">{{ list.name }}</a></li>
+    {% endfor %}
+</ol>
+
+{% endblock %}

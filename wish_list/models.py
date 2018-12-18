@@ -10,10 +10,10 @@ class List(models.Model):
     end = models.BooleanField(default=False)
 
 class Gifts(models.Model):
-    name = models.CharField(max_length=150)
-    desciption = models.TextField(null=True)
-    shop = models.CharField(max_length=250)
-    file = models.FileField()
+    name = models.CharField(max_length=150, verbose_name="O czym marzysz?")
+    desciption = models.TextField(null=True, verbose_name="Opis")
+    shop = models.CharField(max_length=250, verbose_name="Podaj link do sklepu internetowego", null=True)
+    file = models.FileField(verbose_name="Dodaj zdjęcie", null=True)
     wish_list = models.ForeignKey(List, on_delete=models.CASCADE)
-    person = models.ForeignKey(User, on_delete=models.CASCADE)
+    person = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Darczyńca", null=True)
 

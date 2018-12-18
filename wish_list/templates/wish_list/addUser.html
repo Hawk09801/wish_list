@@ -1,0 +1,12 @@
+{% extends 'wish_list/base.html' %}
+
+{% block content %}
+    <form method="POST" style="text-align: center">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Utwórz konto">
+    </form>
+    <p style="text-align: center">Posiadasz już konto?</p>
+<p style="text-align: center"><button type="submit"><a href="/login">Zaloguj się!</a></button></p>
+
+{% endblock %}
