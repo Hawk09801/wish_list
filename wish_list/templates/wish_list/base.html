@@ -23,7 +23,7 @@
         {% endif %}
         <button type="submit"><a href="/search">Wyszukaj osoby</a></button>
         {% if request.user.is_authenticated %}
-        <button type="submit"><a href="/showUser/{{ user.id }}">Moje konto</a></button>
+        <button type="submit"><a href="/showUser/{{ request.user.id }}">Moje konto</a></button>
         {% else %}
         <button type="submit"><a href="/login">Moje konto</a></button>
         {% endif %}

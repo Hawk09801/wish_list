@@ -4,8 +4,20 @@
     <p>Osoba: {{ user.first_name }} {{ user.last_name }}</p>
     <p>Okazja: {{ wish_list.name }}</p>
     {% if user == request.user %}
+<div>
     <button type="submit"><a href="/{{ user.id }}/{{ wish_list.id }}/addGift">Dodaj produkt do listy</a></button>
     <button type="submit"><a href="/{{ user.id }}/{{ wish_list.id }}/delete">Usuń listę</a></button>
+</div>
+<div style="text-align: right">Udostępnij:<br>
+    <button type="submit"><a href="https://www.facebook.com/sharer/sharer.php?u=http://pol-nor.com/">
+        Facebook</a></button>
+    <button type="submit"><a href='https://plus.google.com/share?url=http://pol-nor.com'>Google+</a></button>
+    <button type="submit"><a href="https://www.linkedin.com/shareArticle?mini=true&url=http://pol-nor.com/">
+        Linkedin</a></button>
+    <button type="submit"><a href="https://twitter.com/home?status=Aby%20ułatwić%20Ci%20zadanie,%20podsyłam%20swoją%20listę%20prezentów%20na%20@make_a_wish%20Polecam%20tę%20stronę!%20%23norwegia%20and%20@NorwegiaFirma%20http://pol-nor.com/">
+        Twitter</a></button>
+
+</div>
     {% endif %}
     <table>
         <tbody>
@@ -27,12 +39,13 @@
                 </td>
                 {% if user == request.user %}
                 <td>
-                    <button type="submit"><a href="/{{ user.id }}/{{ wish_list.id }}/{{ gift.id }}">Edytuj</a></button><br>
-                    <button type="submit"><a href="/{{ user.id }}/{{ wish_list.id }}/{{ gift.id }}/delete">Usuń</a></button></td>
+                    <button type="submit"><a href="/{{ user.id }}/{{ wish_list.id }}/{{ gift.id }}">Edytuj prezent</a></button><br>
+                    <button type="submit"><a href="/{{ user.id }}/{{ wish_list.id }}/{{ gift.id }}/delete">Usuń prezent</a></button></td>
                 {% endif %}
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
 
 {% endblock %}
