@@ -1,4 +1,5 @@
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -59,7 +60,8 @@ class AddUserView(View):
 
 
 # tworzenie listy
-class AddGiftListView(CreateView):
+class AddGiftListView(LoginRequiredMixin, CreateView):
+    login_url = '/login'
     model = List
     fields = ['name']
 
@@ -75,12 +77,17 @@ class AddGiftListView(CreateView):
 
 
 # dodawanie prezentów do listy
-class AddGiftToListView(View):
+class AddGiftToListView(LoginRequiredMixin, View):
+    login_url = '/login'
+
     def get(self, request, user_id, list_id):
-        user_id = User.objects.get(pk=user_id)
-        list_id = List.objects.get(pk=list_id)
-        form = AddGiftToListForm()
-        return render(request, 'wish_list/addGift.html', {'form': form, 'user_id': user_id, 'list_id': list_id})
+        user = User.objects.get(pk=user_id)
+        wish_list = List.objects.get(pk=list_id)
+        if user != request.user:
+            return redirect('main')
+        else:
+            form = AddGiftToListForm()
+            return render(request, 'wish_list/addGift.html', {'form': form, 'user_id': user, 'list_id': wish_list})
 
     def post(self, request, user_id, list_id):
         form = AddGiftToListForm(request.POST, request.FILES)
@@ -97,7 +104,9 @@ class AddGiftToListView(View):
 
 
 # widok listy prezentów
-class ListDetailView(View):
+class ListDetailView(LoginRequiredMixin, View):
+    login_url = '/login'
+
     def get(self, request, user_id, list_id):
         user = User.objects.get(pk=user_id)
         wish_list = List.objects.get(pk=list_id)
@@ -116,11 +125,17 @@ class ShowUserView(View):
 
 
 # edycja prezentu
-class EditGiftView(View):
+class EditGiftView(LoginRequiredMixin, View):
+    login_url = '/login'
+
     def get(self, request, user_id, list_id, gift_id):
+        user = User.objects.get(pk=user_id)
         gift = Gifts.objects.get(pk=gift_id)
         form = EditGiftForm(instance=gift)
-        return render(request, 'wish_list/editGift.html', {'form': form})
+        if user != request.user:
+            return redirect('main')
+        else:
+            return render(request, 'wish_list/editGift.html', {'form': form})
 
     def post(self, request, user_id, list_id, gift_id):
         gift = Gifts.objects.get(pk=gift_id)
@@ -131,15 +146,23 @@ class EditGiftView(View):
 
 
 # Usuwanie prezentu
-class DeleteGiftView(View):
+class DeleteGiftView(LoginRequiredMixin, View):
+    login_url = '/login'
+
     def get(self, request, user_id, list_id, gift_id):
+        user = User.objects.get(pk=user_id)
         gift = Gifts.objects.get(pk=gift_id)
-        gift.delete()
-        return redirect("/%s/%s" % (user_id, list_id))
+        if user != request.user:
+            return redirect('main')
+        else:
+            gift.delete()
+            return redirect("/%s/%s" % (user_id, list_id))
 
 
 # zapisywanie się na prezent
-class TakeGiftView(View):
+class TakeGiftView(LoginRequiredMixin, View):
+    login_url = '/login'
+
     def get(self, request, user_id, list_id, gift_id):
         gift = Gifts.objects.get(pk=gift_id)
         gift.person = request.user
@@ -147,7 +170,9 @@ class TakeGiftView(View):
         return redirect("/%s/%s" % (user_id, list_id))
 
 # wypisywanie się z prezentu
-class LeaveGiftView(View):
+class LeaveGiftView(LoginRequiredMixin, View):
+    login_url = '/login'
+
     def get(self, request, user_id, list_id, gift_id):
         gift = Gifts.objects.get(pk=gift_id)
         gift.person = None
@@ -158,19 +183,10 @@ class LeaveGiftView(View):
 # strona główna
 class MainView(View):
     def get(self, request):
-   #     form = SearchForm()
         return render(request, 'wish_list/main.html')
-'''
-    def post(self, request):
-        form = SearchForm(request.POST)
-        users = []
-        if form.is_valid():
-            last_name = form.cleaned_data.get("last_name")
-            users = User.objects.filter(last_name__icontains=last_name)
-        return render(request, 'wish_list/main.html', {'form': form, 'users': users})
-'''
 
 
+# wyszukiwarka
 class SearchView(View):
     def get(self, request):
         form = SearchForm()
@@ -185,11 +201,17 @@ class SearchView(View):
         return render(request, 'wish_list/search.html', {'form': form, 'users': users})
 
 
-class EditUserView(View):
+# edycja użytkownika
+class EditUserView(LoginRequiredMixin, View):
+    login_url = '/login'
+
     def get(self, request, user_id):
         person = User.objects.get(pk=user_id)
-        form = EditUserForm(instance=person)
-        return render(request, 'wish_list/editUser.html', {'form': form})
+        if person != request.user:
+            return redirect('main')
+        else:
+            form = EditUserForm(instance=person)
+            return render(request, 'wish_list/editUser.html', {'form': form})
 
     def post(self, request, user_id):
         form = EditUserForm(request.POST)
@@ -200,13 +222,20 @@ class EditUserView(View):
             user.save()
         return redirect('/showUser/%s' % user.id)
 
-class EditPasswordView(View):
+
+# zmiana hasła
+class EditPasswordView(LoginRequiredMixin, View):
+    login_url = '/login'
+
     def get(self, request, user_id):
-        form = EditPasswordForm()
-        return render(request, "wish_list/editPassword.html", {'form': form})
+        user = User.objects.get(pk=user_id)
+        if user != request.user:
+            return redirect('main')
+        else:
+            form = EditPasswordForm()
+            return render(request, "wish_list/editPassword.html", {'form': form})
 
     def post(self, request, user_id):
-    #    user = User.objects.get(pk=user_id)
         form = EditPasswordForm(request.POST)
         if form.is_valid():
             new_password = form.cleaned_data.get("new_password")
@@ -217,9 +246,15 @@ class EditPasswordView(View):
         return render(request, "wish_list/editPassword.html", {'form': form})
 
 
-class DeleteListView(View):
+# usunięcie listy prezentów
+class DeleteListView(LoginRequiredMixin, View):
+    login_url = '/login'
+
     def get(self, request, user_id, list_id):
         u = User.objects.get(pk=user_id)
-        list = List.objects.get(pk=list_id)
-        list.delete()
-        return redirect('/showUser/%s' % u.id)
+        if u != request.user:
+            return redirect('main')
+        else:
+            wish_list = List.objects.get(pk=list_id)
+            wish_list.delete()
+            return redirect('/showUser/%s' % u.id)
