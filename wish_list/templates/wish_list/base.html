@@ -18,8 +18,10 @@
         <button type="submit"><a href="/">Strona główna</a></button>
         {% if request.user.is_authenticated %}
         <button type="submit"><a href="/{{ user.id }}/add_list">Utwórz swoją listę prezentów</a></button>
+        <button type="submit"><a href="/{{ user.id }}/addFundraiser">Utwórz swoją zrzutkę</a></button>
         {% else %}
         <button type="submit"><a href="/login">Utwórz swoją listę prezentów</a></button>
+        <button type="submit"><a href="/login">Utwórz swoją zrzutkę</a></button>
         {% endif %}
         <button type="submit"><a href="/search">Wyszukaj osoby</a></button>
         {% if request.user.is_authenticated %}

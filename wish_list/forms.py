@@ -115,3 +115,15 @@ class EditPasswordForm(forms.Form):
             raise ValidationError("Wpisane hasła muszą być takie same")
 
         return cleaned_date
+
+
+class AddFundraiserForm(ModelForm):
+    class Meta:
+        model = Fundraiser
+        exclude = ['user']
+
+
+class AddDonorForm(ModelForm):
+    class Meta:
+        model = Donors
+        fields = ['amount']

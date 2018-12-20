@@ -1,0 +1,39 @@
+{% extends 'wish_list/base.html' %}
+
+{% block content %}
+    <p>Osoba: <a href="/showUser/{{ user.id }}"> {{ user.first_name }} {{ user.last_name }}</a></p>
+    <p>Okazja: {{ fundraiser.goal }}</p>
+    <p>Szczegóły: {{ fundraiser.desciption }}</p>
+    <p>Kwota zbiórki: {{ fundraiser.amount }}</p>
+{% if user == request.user %}
+<p>
+    <button type="submit"><a href="/{{ user.id }}/fundraiser/{{ fundraiser.id }}/edit">Edytuj zbiórkę</a></button>
+    <button type="submit"><a href="/{{ user.id }}/fundraiser/{{ fundraiser.id }}/delete">Usuń zbiórkę</a></button>
+</p>
+
+<div style="text-align: right">Udostępnij:<br>
+    <button type="submit"><a href="https://www.facebook.com/sharer/sharer.php?u=http://pol-nor.com/">
+        Facebook</a></button>
+    <button type="submit"><a href='https://plus.google.com/share?url=http://pol-nor.com'>Google+</a></button>
+    <button type="submit"><a href="https://www.linkedin.com/shareArticle?mini=true&url=http://pol-nor.com/">
+        Linkedin</a></button>
+    <button type="submit"><a href="https://twitter.com/home?status=Aby%20ułatwić%20Ci%20zadanie,%20podsyłam%20swoją%20listę%20prezentów%20na%20@make_a_wish%20Polecam%20tę%20stronę!%20%23norwegia%20and%20@NorwegiaFirma%20http://pol-nor.com/">
+        Twitter</a></button>
+</div>
+{% endif %}
+<p><button type="submit"><a href="/{{ user.id }}/fundraiser/{{ fundraiser.id }}/addDonor">Dorzuć się</a></button></p>
+<p>Do tej pory usało się zebrać: {{ result }}</p>
+
+<p>Składający się:</p>
+<ol>
+    {% for donor in donors %}
+    <li>{{ donor.user.first_name }} {{ donor.user.last_name }} {{ donor.amount }}
+        {% if donor.user == request.user %}
+        <button type="submit"><a href="/{{ user.id }}/fundraiser/{{ fundraiser.id }}/{{ donor.id }}/edit">Zmień wysokość składki</a></button>
+        <button type="submit"><a href="/{{ user.id }}/fundraiser/{{ fundraiser.id }}/{{ donor.id }}">Anuluj składkę</a></button>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ol>
+
+{% endblock %}

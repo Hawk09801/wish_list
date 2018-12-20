@@ -99,8 +99,7 @@ class AddGiftToListView(LoginRequiredMixin, View):
             wish_list = List.objects.get(pk=list_id)
             Gifts.objects.create(name=name, desciption=desciption, shop=shop, file=file, wish_list=wish_list)
             cxt = {'user': User.objects.get(pk=user_id), 'wish_list': wish_list, 'gifts': Gifts.objects.filter(wish_list=wish_list)}
-            return render(request, 'wish_list/listDetail.html', cxt)
-        return HttpResponse("Nie dodano do bazy")
+        return render(request, 'wish_list/listDetail.html', cxt)
 
 
 # widok listy prezentów
@@ -120,7 +119,8 @@ class ShowUserView(View):
     def get(self, request, user_id):
         user = User.objects.get(pk=user_id)
         lists = List.objects.filter(user=user)
-        return render(request, 'wish_list/showUser.html', {'user': user, 'lists': lists})
+        fundraisers = Fundraiser.objects.filter(user=user)
+        return render(request, 'wish_list/showUser.html', {'user': user, 'lists': lists, 'fundraisers': fundraisers})
 
 
 
@@ -258,3 +258,124 @@ class DeleteListView(LoginRequiredMixin, View):
             wish_list = List.objects.get(pk=list_id)
             wish_list.delete()
             return redirect('/showUser/%s' % u.id)
+
+
+# dodanie zbiórki pieniędzy
+class AddFundraiserView(LoginRequiredMixin, View):
+    login_url = '/login'
+
+    def get(self, request, user_id):
+        form = AddFundraiserForm()
+        user = User.objects.get(pk=user_id)
+        if user != request.user:
+            return redirect('main')
+        else:
+            return render(request, 'wish_list/addFundraiser.html', {'form': form})
+
+    def post(self, request, user_id):
+        form = AddFundraiserForm(request.POST)
+        if form.is_valid():
+            goal = form.cleaned_data.get('goal')
+            desciption = form.cleaned_data.get('desciption')
+            amount = form.cleaned_data.get('amount')
+            user = User.objects.get(pk=user_id)
+            new_fundraiser = Fundraiser.objects.create(goal=goal, desciption=desciption, amount=amount, user=user)
+        return redirect('/%s/fundraiser/%s' % (user_id, new_fundraiser.id))
+
+# wyświetlenie widoku zbiórki
+class FundraiserDetailView(LoginRequiredMixin, View):
+    login_url = '/login'
+
+    def get(self, request, user_id, fundraiser_id):
+        user = User.objects.get(pk=user_id)
+        fundraiser = Fundraiser.objects.get(pk=fundraiser_id)
+        donors = Donors.objects.filter(fundraiser=fundraiser_id)
+        result = 0
+        for donor in donors:
+            result += donor.amount
+        return render(request, 'wish_list/showFundraiser.html', {'user': user, 'fundraiser': fundraiser, 'donors':donors, 'result':result})
+
+
+# dodawanie składki od osoby
+class AddDonorView(LoginRequiredMixin, View):
+    login_url = '/login'
+
+    def get(self, request, user_id, fundraiser_id):
+        fundraiser = Fundraiser.objects.get(pk=fundraiser_id)
+        form = AddDonorForm()
+        return render(request, 'wish_list/addDonor.html', {'form': form, 'fundraiser': fundraiser})
+
+    def post(self, request, user_id, fundraiser_id):
+        form = AddDonorForm(request.POST)
+        if form.is_valid():
+            amount = form.cleaned_data.get('amount')
+            user = request.user
+            fundraiser = Fundraiser.objects.get(pk=fundraiser_id)
+            Donors.objects.create(amount=amount, user=user, fundraiser=fundraiser)
+        return redirect('/%s/fundraiser/%s' % (user_id, fundraiser_id))
+
+
+# usunięcie zbiórki
+class DeleteFundraiserView(LoginRequiredMixin, View):
+    login_url = '/login'
+
+    def get(self, request, user_id, fundraiser_id):
+        u = User.objects.get(pk=user_id)
+        if u != request.user:
+            return redirect('main')
+        else:
+            fundraiser = Fundraiser.objects.get(pk=fundraiser_id)
+            fundraiser.delete()
+            return redirect('/showUser/%s' % u.id)
+
+
+# anulowanie składki
+class CancelDonorView(LoginRequiredMixin, View):
+    login_url = '/login'
+
+    def get(self, request, user_id, fundraiser_id, donor_id):
+        donor = Donors.objects.get(pk=donor_id)
+        donor.delete()
+        return redirect("/%s/fundraiser/%s" % (user_id, fundraiser_id))
+
+# edycja zrzutki
+class EditFundraiserView(LoginRequiredMixin, View):
+    login_url = '/login'
+
+    def get(self, request, user_id, fundraiser_id):
+        user = User.objects.get(pk=user_id)
+        fundraiser = Fundraiser.objects.get(pk=fundraiser_id)
+        form = AddFundraiserForm(instance=fundraiser)
+        if user != request.user:
+            return redirect('main')
+        else:
+            return render(request, 'wish_list/addFundraiser.html', {'form': form})
+
+    def post(self, request, user_id, fundraiser_id):
+        fundraiser = Fundraiser.objects.get(pk=fundraiser_id)
+        form = AddFundraiserForm(request.POST, instance=fundraiser)
+        if form.is_valid():
+            form.save()
+        return redirect("/%s/fundraiser/%s" % (user_id, fundraiser_id))
+
+
+# edycja składki
+class EditDonorView(LoginRequiredMixin, View):
+    login_url = '/login'
+
+    def get(self, request, user_id, fundraiser_id, donor_id):
+        donor = Donors.objects.get(pk=donor_id)
+        if donor.user != request.user:
+            return redirect('main')
+        else:
+            form = AddDonorForm(instance=donor)
+            return render(request, 'wish_list/addDonor.html', {'form': form})
+
+    def post(self, request, user_id, fundraiser_id, donor_id):
+        donor = Donors.objects.get(pk=donor_id)
+        form = AddDonorForm(request.POST, instance=donor)
+        if form.is_valid():
+            form.save()
+        return redirect("/%s/fundraiser/%s" % (user_id, fundraiser_id))
+
+

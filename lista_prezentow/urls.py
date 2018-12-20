@@ -39,6 +39,13 @@ urlpatterns = [
     url(r'^edit/(?P<user_id>(\d)+)$', EditUserView.as_view()),
     url(r'^edit/(?P<user_id>(\d)+)/editPassword$', EditPasswordView.as_view()),
     url(r'^(?P<user_id>(\d)+)/(?P<list_id>(\d)+)/delete$', DeleteListView.as_view()),
+    url(r'^(?P<user_id>(\d)+)/addFundraiser$', AddFundraiserView.as_view()),
+    url(r'^(?P<user_id>(\d)+)/fundraiser/(?P<fundraiser_id>(\d)+)$', FundraiserDetailView.as_view()),
+    url(r'^(?P<user_id>(\d)+)/fundraiser/(?P<fundraiser_id>(\d)+)/addDonor$', AddDonorView.as_view()),
+    url(r'^(?P<user_id>(\d)+)/fundraiser/(?P<fundraiser_id>(\d)+)/delete$', DeleteFundraiserView.as_view()),
+    url(r'^(?P<user_id>(\d)+)/fundraiser/(?P<fundraiser_id>(\d)+)/(?P<donor_id>(\d)+)$', CancelDonorView.as_view()),
+    url(r'^(?P<user_id>(\d)+)/fundraiser/(?P<fundraiser_id>(\d)+)/edit$', EditFundraiserView.as_view()),
+    url(r'^(?P<user_id>(\d)+)/fundraiser/(?P<fundraiser_id>(\d)+)/(?P<donor_id>(\d)+)/edit$', EditDonorView.as_view()),
 
 
 ]

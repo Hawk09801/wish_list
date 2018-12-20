@@ -1,7 +1,7 @@
 {% extends 'wish_list/base.html' %}
 
 {% block content %}
-    <p>Osoba: {{ user.first_name }} {{ user.last_name }}</p>
+    <p>Osoba: <a href="/showUser/{{ user.id }}"> {{ user.first_name }} {{ user.last_name }}</a></p>
     <p>Okazja: {{ wish_list.name }}</p>
     {% if user == request.user %}
 <div>
