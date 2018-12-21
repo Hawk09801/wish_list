@@ -1,12 +1,15 @@
 {% extends 'wish_list/base.html' %}
 
 {% block content %}
+<div class="black">Załóż konto</div>
+<p></p>
     <form method="POST" style="text-align: center">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Utwórz konto">
+        <input class="btn btn-info" type="submit" value="Utwórz konto">
     </form>
+<p></p>
     <p style="text-align: center">Posiadasz już konto?</p>
-<p style="text-align: center"><button type="submit"><a href="/login">Zaloguj się!</a></button></p>
+<p style="text-align: center"><a href="/login" class="btn btn-info">Zaloguj się! <i class="fas fa-user"></i></a></p>
 
 {% endblock %}

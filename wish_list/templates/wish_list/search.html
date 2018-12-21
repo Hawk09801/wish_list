@@ -1,16 +1,20 @@
 {% extends 'wish_list/base.html' %}
 
 {% block content %}
-    <form method="POST">
+<div class="black">Szukaj</div>
+<div class="container">
+<p></p>
+    <form method="POST" style="text-align: center">
         {% csrf_token %}
         {{ form }}
-        <input type="submit" value="Szukaj">
+        <input class="btn btn-info" type="submit" value="Szukaj">
     </form>
     {% if users %}
-    <ul>
+    <ul style="text-align: center"><strong>Znaleziono:</strong>
         {% for user in users %}
-        <li><a href="/showUser/{{ user.id }}">{{user.first_name}} {{user.last_name}}</a></li>
+        <li><a href="/showUser/{{ user.id }}" style="color: black">{{user.first_name}} {{user.last_name}}</a></li>
         {% endfor %}
     </ul>
     {% endif %}
+</div>
 {% endblock %}

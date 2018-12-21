@@ -17,6 +17,7 @@ from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import RedirectView
 from django.views.static import serve
 from wish_list.views import *
 
@@ -46,6 +47,7 @@ urlpatterns = [
     url(r'^(?P<user_id>(\d)+)/fundraiser/(?P<fundraiser_id>(\d)+)/(?P<donor_id>(\d)+)$', CancelDonorView.as_view()),
     url(r'^(?P<user_id>(\d)+)/fundraiser/(?P<fundraiser_id>(\d)+)/edit$', EditFundraiserView.as_view()),
     url(r'^(?P<user_id>(\d)+)/fundraiser/(?P<fundraiser_id>(\d)+)/(?P<donor_id>(\d)+)/edit$', EditDonorView.as_view()),
+    url(r'^favicon\.ico$',RedirectView.as_view(url='/static/favicon.ico')),
 
 
 ]

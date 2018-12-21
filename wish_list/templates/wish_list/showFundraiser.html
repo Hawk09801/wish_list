@@ -1,39 +1,43 @@
 {% extends 'wish_list/base.html' %}
 
 {% block content %}
-    <p>Osoba: <a href="/showUser/{{ user.id }}"> {{ user.first_name }} {{ user.last_name }}</a></p>
-    <p>Okazja: {{ fundraiser.goal }}</p>
+<div class="black">{{ fundraiser.goal }}</div>
+<div class="container">
+<p></p>
+<p>Osoba: <a href="/showUser/{{ user.id }}"><strong>{{ user.first_name }} {{ user.last_name }}</strong></a></p>
     <p>Szczegóły: {{ fundraiser.desciption }}</p>
     <p>Kwota zbiórki: {{ fundraiser.amount }}</p>
 {% if user == request.user %}
 <p>
-    <button type="submit"><a href="/{{ user.id }}/fundraiser/{{ fundraiser.id }}/edit">Edytuj zbiórkę</a></button>
-    <button type="submit"><a href="/{{ user.id }}/fundraiser/{{ fundraiser.id }}/delete">Usuń zbiórkę</a></button>
+    <a href="/{{ user.id }}/fundraiser/{{ fundraiser.id }}/edit" class="btn btn-outline-info">Edytuj zbiórkę <i class="fas fa-edit"></i></a>
+    <a href="/{{ user.id }}/fundraiser/{{ fundraiser.id }}/delete" class="btn btn-outline-info">Usuń zbiórkę <i class="fas fa-trash-alt"></i></a>
 </p>
 
-<div style="text-align: right">Udostępnij:<br>
-    <button type="submit"><a href="https://www.facebook.com/sharer/sharer.php?u=http://pol-nor.com/">
-        Facebook</a></button>
-    <button type="submit"><a href='https://plus.google.com/share?url=http://pol-nor.com'>Google+</a></button>
-    <button type="submit"><a href="https://www.linkedin.com/shareArticle?mini=true&url=http://pol-nor.com/">
-        Linkedin</a></button>
-    <button type="submit"><a href="https://twitter.com/home?status=Aby%20ułatwić%20Ci%20zadanie,%20podsyłam%20swoją%20listę%20prezentów%20na%20@make_a_wish%20Polecam%20tę%20stronę!%20%23norwegia%20and%20@NorwegiaFirma%20http://pol-nor.com/">
-        Twitter</a></button>
+<div style="text-align: right">Udostępnij:
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://pol-nor.com/">
+        <i class="fab fa-facebook-square"></i></a>
+    <a target="_blank" href='https://plus.google.com/share?url=http://pol-nor.com'><i class="fab fa-google-plus-g"></i></a>
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http://pol-nor.com/">
+        <i class="fab fa-linkedin-in"></i></a>
+    <a target="_blank" href="https://twitter.com/home?status=Aby%20ułatwić%20Ci%20zadanie,%20podsyłam%20swoją%20listę%20prezentów%20na%20@make_a_wish%20Polecam%20tę%20stronę!%20%23norwegia%20and%20@NorwegiaFirma%20http://pol-nor.com/">
+        <i class="fab fa-twitter"></i></a>
 </div>
 {% endif %}
-<p><button type="submit"><a href="/{{ user.id }}/fundraiser/{{ fundraiser.id }}/addDonor">Dorzuć się</a></button></p>
-<p>Do tej pory usało się zebrać: {{ result }}</p>
+<p><a href="/{{ user.id }}/fundraiser/{{ fundraiser.id }}/addDonor" class="btn btn-info">Dorzuć się <i class="fas fa-donate"></i></a></p>
+<p>Do tej pory udało się zebrać: <strong>{{ result }}</strong></p>
 
-<p>Składający się:</p>
+<p><strong>Składający się:</strong></p>
 <ol>
     {% for donor in donors %}
     <li>{{ donor.user.first_name }} {{ donor.user.last_name }} {{ donor.amount }}
         {% if donor.user == request.user %}
-        <button type="submit"><a href="/{{ user.id }}/fundraiser/{{ fundraiser.id }}/{{ donor.id }}/edit">Zmień wysokość składki</a></button>
-        <button type="submit"><a href="/{{ user.id }}/fundraiser/{{ fundraiser.id }}/{{ donor.id }}">Anuluj składkę</a></button>
+        <a href="/{{ user.id }}/fundraiser/{{ fundraiser.id }}/{{ donor.id }}/edit" class="btn btn-outline-info">Zmień wysokość składki <i class="fas fa-edit"></i></a>
+        <a href="/{{ user.id }}/fundraiser/{{ fundraiser.id }}/{{ donor.id }}" class="btn btn-outline-info">Anuluj składkę <i class="fas fa-trash-alt"></i></a>
         {% endif %}
     </li>
     {% endfor %}
 </ol>
-
+<p></p>
+<a href="/showUser/{{ user.id }}" class="btn btn-info">Powrót <i class="fas fa-undo"></i></a>
+</div>
 {% endblock %}

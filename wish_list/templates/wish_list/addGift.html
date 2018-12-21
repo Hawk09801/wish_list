@@ -1,10 +1,12 @@
 {% extends 'wish_list/base.html' %}
 
 {% block content %}
+<div class="black">Dodaj prezent</div>
+<p></p>
     <form method="POST" style="text-align: center" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Dodaj prezent">
+        <input class="btn btn-info" type="submit" value="Dodaj prezent">
     </form>
 
 {% endblock %}

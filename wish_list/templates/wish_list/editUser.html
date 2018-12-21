@@ -1,11 +1,13 @@
 {% extends 'wish_list/base.html' %}
 
 {% block content %}
-    <form method="POST">
+<div class="black">Edytuj konto</div>
+<p></p>
+    <form method="POST" style="text-align: center">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit"><a href="/edit/{{ user.id }}/editPassword">Zmień hasło</a></button>
-        <input type="submit" value="Zapisz zmiany">
+        <a href="/edit/{{ user.id }}/editPassword" class="btn btn-info">Zmień hasło</a>
+        <input class="btn btn-info" type="submit" value="Zapisz zmiany">
     </form>
 
 

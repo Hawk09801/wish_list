@@ -1,0 +1,58 @@
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background-color: #FFCCA0;
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+
+nav a:hover {
+    background-color: rgba(255,255,255,0.25);
+}
+
+nav a {
+    transition: background-color 0.5s ease-out;
+    margin: 0 10px;
+}
+
+table img {
+    height: 20vh;
+}
+
+.table tbody tr:hover>td {
+    background-color: navajowhite;
+
+}
+
+.table tbody tr td {
+    transition: background-color 1s ease-out;
+}
+
+#navbarSupportedContent a {
+    font-weight: 300;
+    color: white;
+}
+
+#login {
+    color: white;
+}
+
+#login a {
+    color: white;
+}
+
+.black {
+    background-color: black;
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 300;
+}
+
+#footer {
+    font-size: 10px;
+    text-align: center;
+}

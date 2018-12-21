@@ -1,51 +1,55 @@
 {% extends 'wish_list/base.html' %}
 
 {% block content %}
-    <p>Osoba: <a href="/showUser/{{ user.id }}"> {{ user.first_name }} {{ user.last_name }}</a></p>
-    <p>Okazja: {{ wish_list.name }}</p>
+<div class="black">{{ wish_list.name }}</div>
+<div class="container">
+
+<p></p>
+    <p>Lista należy do: {{ user.first_name }} {{ user.last_name }}</p>
     {% if user == request.user %}
 <div>
-    <button type="submit"><a href="/{{ user.id }}/{{ wish_list.id }}/addGift">Dodaj produkt do listy</a></button>
-    <button type="submit"><a href="/{{ user.id }}/{{ wish_list.id }}/delete">Usuń listę</a></button>
+    <a href="/{{ user.id }}/{{ wish_list.id }}/addGift" class="btn btn-outline-info">Dodaj prezent <i class="fas fa-plus"></i></a>
+    <a href="/{{ user.id }}/{{ wish_list.id }}/delete" class="btn btn-outline-info">Usuń prezent <i class="fas fa-trash-alt"></i></a>
 </div>
-<div style="text-align: right">Udostępnij:<br>
-    <button type="submit"><a href="https://www.facebook.com/sharer/sharer.php?u=http://pol-nor.com/">
-        Facebook</a></button>
-    <button type="submit"><a href='https://plus.google.com/share?url=http://pol-nor.com'>Google+</a></button>
-    <button type="submit"><a href="https://www.linkedin.com/shareArticle?mini=true&url=http://pol-nor.com/">
-        Linkedin</a></button>
-    <button type="submit"><a href="https://twitter.com/home?status=Aby%20ułatwić%20Ci%20zadanie,%20podsyłam%20swoją%20listę%20prezentów%20na%20@make_a_wish%20Polecam%20tę%20stronę!%20%23norwegia%20and%20@NorwegiaFirma%20http://pol-nor.com/">
-        Twitter</a></button>
-
+<div style="text-align: right">Udostępnij:
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://pol-nor.com/">
+        <i class="fab fa-facebook-square"></i></a>
+    <a target="_blank" href='https://plus.google.com/share?url=http://pol-nor.com'><i class="fab fa-google-plus-g"></i></a>
+    <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http://pol-nor.com/">
+        <i class="fab fa-linkedin-in"></i></a>
+    <a target="_blank" href="https://twitter.com/home?status=Aby%20ułatwić%20Ci%20zadanie,%20podsyłam%20swoją%20listę%20prezentów%20na%20@make_a_wish%20Polecam%20tę%20stronę!%20%23norwegia%20and%20@NorwegiaFirma%20http://pol-nor.com/">
+        <i class="fab fa-twitter"></i></a>
 </div>
     {% endif %}
-    <table>
+    <table class="table table-striped">
         <tbody>
             {% for gift in gifts %}
             <tr>
                 <td><img src="/media/{{ gift.file }}"></td>
-                <td>{{ gift.name }}<br>{{ gift.desciption }}<br>
-                    <button type="submit"><a target="_blank" href="{{ gift.shop }}">Przejdź do sklepu</a></button></td>
-                <td>{{ gift.person.first_name|default:"Wolne"}}<br>
+                <td><strong>{{ gift.name }}</strong><br>{{ gift.desciption }}<br>
+                    <a target="_blank" href="{{ gift.shop }}" class="btn btn-outline-info">Przejdź do sklepu <i class="fas fa-shopping-cart"></i></a></td>
+                <td>{{ gift.person.first_name|default:"Nikt się jeszcze nie zapisał na ten prezent" }}<br>
                     {% if request.user.is_authenticated %}
                     {% if not gift.person %}
-                    <button type="submit"><a href="/take/{{ user.id }}/{{ wish_list.id }}/{{ gift.id }}">Zaklepuję ten prezent</a></button>
+                    <a href="/take/{{ user.id }}/{{ wish_list.id }}/{{ gift.id }}"class="btn btn-outline-info">Zaklepuję ten prezent <i class="fas fa-check"></i></a>
                     {% else %}
                     {% if gift.person == request.user %}
-                    <button type="submit"><a href="/leave/{{ user.id }}/{{ wish_list.id }}/{{ gift.id }}">Zrezygnuj z kupna tego prezentu</a></button>
+                    <a href="/leave/{{ user.id }}/{{ wish_list.id }}/{{ gift.id }}" class="btn btn-outline-info">Zrezygnuj z kupna tego prezentu <i class="fas fa-times"></i></a>
                     {% endif %}
                     {% endif %}
                     {% endif %}
                 </td>
                 {% if user == request.user %}
                 <td>
-                    <button type="submit"><a href="/{{ user.id }}/{{ wish_list.id }}/{{ gift.id }}">Edytuj prezent</a></button><br>
-                    <button type="submit"><a href="/{{ user.id }}/{{ wish_list.id }}/{{ gift.id }}/delete">Usuń prezent</a></button></td>
+                    <a href="/{{ user.id }}/{{ wish_list.id }}/{{ gift.id }}" class="btn btn-outline-info">Edytuj prezent <i class="fas fa-edit"></i></a><br>
+                    <a href="/{{ user.id }}/{{ wish_list.id }}/{{ gift.id }}/delete" class="btn btn-outline-info">Usuń prezent <i class="fas fa-trash-alt"></i></a></td>
                 {% endif %}
             </tr>
             {% endfor %}
         </tbody>
     </table>
+<p></p>
+<a href="/showUser/{{ user.id }}" class="btn btn-info">Powrót <i class="fas fa-undo"></i></a>
 
-
+</div>
 {% endblock %}
